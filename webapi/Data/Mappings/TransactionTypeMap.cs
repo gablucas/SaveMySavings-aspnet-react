@@ -22,8 +22,8 @@ public class TransactionTypeMap : IEntityTypeConfiguration<TransactionType>
             .HasMaxLength(80);
 
         builder.HasData(
-            new TransactionType { Id = 1, Name = "A vista" },
-            new TransactionType { Id = 2, Name = "Parcelado" }
+            new TransactionType { Id = 1, Name = "Receita" },
+            new TransactionType { Id = 2, Name = "Despesa" }
         );
     }
 }

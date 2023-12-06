@@ -10,14 +10,14 @@ namespace SaveMySavings.Controller;
 
 public class TransactionCategoryController : ControllerBase
 {
-    [HttpGet("v1/transactions-category")]
+    [HttpGet("v1/categories")]
     public async Task<IActionResult> GetAsync([FromServices] SaveMysavingsDataContext context)
     {
         var transactionCategory = await context.TransactionsCategory.AsNoTracking().ToListAsync();
         return Ok(transactionCategory);
     }
 
-    [HttpPost("v1/transactions-category")]
+    [HttpPost("v1/categories")]
     public async Task<IActionResult> PostAsync([FromBody] TransactionCategoryViewModel model, [FromServices] SaveMysavingsDataContext context)
     {
         var transactionCategory = new TransactionCategory
@@ -30,7 +30,7 @@ public class TransactionCategoryController : ControllerBase
         return Created($"v1/transactions-category/{transactionCategory}", transactionCategory);
     }
 
-    [HttpPut("v1/transactions-category/{id:int}")]
+    [HttpPut("v1/categories/{id:int}")]
     public async Task<IActionResult> PutAsync([FromRoute] int id, [FromBody] TransactionCategoryViewModel model, [FromServices] SaveMysavingsDataContext context)
     {
         var transactionCategory = await context.TransactionsCategory.FirstOrDefaultAsync(x => x.Id == id);
@@ -45,7 +45,7 @@ public class TransactionCategoryController : ControllerBase
         return Ok(transactionCategory);
     }
 
-    [HttpDelete("v1/transactions-category/{id:int}")]
+    [HttpDelete("v1/categories/{id:int}")]
     public async Task<IActionResult> DeleteAsync([FromRoute] int id, [FromServices] SaveMysavingsDataContext context)
     {
         var transactionCategory = context.TransactionsCategory.FirstOrDefault(x => x.Id == id);

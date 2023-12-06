@@ -26,6 +26,8 @@ public class TransactionCategoryMap : IEntityTypeConfiguration<TransactionCatego
             new TransactionCategory { Id = 2, Name = "Casa" },
             new TransactionCategory { Id = 3, Name = "Educação" },
             new TransactionCategory { Id = 4, Name = "Alimentação" },
+            new TransactionCategory { Id = 6, Name = "Carro" },
+            new TransactionCategory { Id = 7, Name = "Contas" },
             new TransactionCategory { Id = 5, Name = "Outros" }
         );
     }

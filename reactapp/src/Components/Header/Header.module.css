@@ -1,0 +1,24 @@
+.header {
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid #313131;
+    padding: 0.5rem 1rem;
+    margin-bottom: 12px;
+    background-color: #242424;
+}
+
+.header h1 {
+  color: #F7F7F7;
+}
+
+.header button {
+  background-color: #FFA700;
+  color: #242424;
+  font-weight: 700;
+  font-size: 1rem;
+  transition: filter .3s;
+}
+
+.header button:hover {
+  filter: brightness(1.2);
+}

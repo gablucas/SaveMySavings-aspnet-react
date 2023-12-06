@@ -1,0 +1,18 @@
+.modal_container {
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  bottom: 0px;
+  }
+  
+.modal_content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 7px;
+  padding: 40px;
+  color: #F7F7F7;
+  background-color: #242424;
+}

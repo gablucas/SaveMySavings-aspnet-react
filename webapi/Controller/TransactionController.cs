@@ -12,19 +12,19 @@ public class TransactionController : ControllerBase
     [HttpGet("v1/transactions")]
     public async Task<IActionResult> GetAsync([FromServices] SaveMysavingsDataContext context)
     {
-        var categories = await context.Transactions.Include(x => x.TransactionType).Include(x => x.TransactionCategory).AsNoTracking().ToListAsync();
+        var categories = await context.Transactions.Include(x => x.Type).Include(x => x.Category).AsNoTracking().ToListAsync();
         return Ok(categories);
     }
 
     [HttpPost("v1/transactions")]
     public async Task<IActionResult> PostAsync([FromBody] TransactionViewModel model, [FromServices] SaveMysavingsDataContext context)
     {
-        var transactionType = await context.TransactionsType.FirstOrDefaultAsync(x => x.Id == model.TransactionType);
-        var transactionCategory = await context.TransactionsCategory.FirstOrDefaultAsync(x => x.Id == model.TransactionCategory);
+        var transactionType = await context.TransactionsType.FirstOrDefaultAsync(x => x.Id == model.Type);
+        var transactionCategory = await context.TransactionsCategory.FirstOrDefaultAsync(x => x.Id == model.Category);
 
         if (transactionType == null)
         {
-            return NotFound($"Tipo não encontrado {model.TransactionType}");
+            return NotFound($"Tipo não encontrado {model.Type}");
         }
          
         if (transactionCategory == null)
@@ -32,13 +32,12 @@ public class TransactionController : ControllerBase
             return NotFound("Categoria não encontrada");
         }
 
-        Transaction transaction = new Transaction(model.Installments)
+        Transaction transaction = new Transaction
         {
            Title = model.Title,
            Amount = model.Amount,
-           Installments = model.Installments,
-           TransactionType = transactionType,
-           TransactionCategory = transactionCategory,
+           Type = transactionType,
+           Category = transactionCategory,
            InitialDate = model.InitialDate,
         };
 
@@ -57,8 +56,8 @@ public class TransactionController : ControllerBase
             return NotFound("Transação não encontrada");
         }
 
-        var transactionType = await context.TransactionsType.FirstOrDefaultAsync(x => x.Id == model.TransactionType);
-        var transactionCategory = await context.TransactionsCategory.FirstOrDefaultAsync(x => x.Id == model.TransactionCategory);
+        var transactionType = await context.TransactionsType.FirstOrDefaultAsync(x => x.Id == model.Type);
+        var transactionCategory = await context.TransactionsCategory.FirstOrDefaultAsync(x => x.Id == model.Category);
 
         if (transactionType == null)
         {
@@ -72,11 +71,9 @@ public class TransactionController : ControllerBase
 
         transaction.Title = model.Title;
         transaction.Amount = model.Amount;
-        transaction.Installments = model.Installments;
-        transaction.TransactionType = transactionType;
-        transaction.TransactionCategory = transactionCategory;
+        transaction.Type = transactionType;
+        transaction.Category = transactionCategory;
         transaction.InitialDate = model.InitialDate;
-        transaction.FinalDate = model.InitialDate.AddMonths(model.Installments);
 
         context.Transactions.Update(transaction);
         await context.SaveChangesAsync();

@@ -1,0 +1,23 @@
+
+.transactions ul {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  padding: 10px;
+  list-style: none;
+}
+
+.menu {
+  font-weight: 600;
+  background-color: #121212;
+  color: #F7F7F7;
+  border-radius: 7px;
+}
+
+.transaction:nth-child(odd) {
+  background-color: #51AFF7;
+}
+
+.action:hover {
+  font-weight: 700;
+  cursor: pointer;
+}

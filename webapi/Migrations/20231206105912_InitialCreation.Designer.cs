@@ -12,7 +12,7 @@ using SaveMySavings.Data;
 namespace SaveMySavings.Migrations
 {
     [DbContext(typeof(SaveMysavingsDataContext))]
-    [Migration("20231205192738_InitialCreation")]
+    [Migration("20231206105912_InitialCreation")]
     partial class InitialCreation
     {
         /// <inheritdoc />
@@ -37,17 +37,12 @@ namespace SaveMySavings.Migrations
                         .HasColumnType("DECIMAL(10, 2)")
                         .HasColumnName("Amount");
 
-                    b.Property<DateTime>("FinalDate")
-                        .HasColumnType("DATETIME")
-                        .HasColumnName("FinalDate");
+                    b.Property<int>("CategoryId")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("InitialDate")
                         .HasColumnType("DATETIME")
-                        .HasColumnName("InicialDate");
-
-                    b.Property<int>("Installments")
-                        .HasColumnType("INT")
-                        .HasColumnName("Installments");
+                        .HasColumnName("InitialDate");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -55,17 +50,14 @@ namespace SaveMySavings.Migrations
                         .HasColumnType("NVARCHAR")
                         .HasColumnName("Title");
 
-                    b.Property<int>("TransactionCategoryId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TransactionTypeId")
+                    b.Property<int>("TypeId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("TransactionCategoryId");
+                    b.HasIndex("CategoryId");
 
-                    b.HasIndex("TransactionTypeId");
+                    b.HasIndex("TypeId");
 
                     b.ToTable("Transaction", (string)null);
                 });
@@ -138,34 +130,34 @@ namespace SaveMySavings.Migrations
                         new
                         {
                             Id = 1,
-                            Name = "A vista"
+                            Name = "Receita"
                         },
                         new
                         {
                             Id = 2,
-                            Name = "Parcelado"
+                            Name = "Despesa"
                         });
                 });
 
             modelBuilder.Entity("SaveMySavings.Models.Transaction", b =>
                 {
-                    b.HasOne("SaveMySavings.Models.TransactionCategory", "TransactionCategory")
+                    b.HasOne("SaveMySavings.Models.TransactionCategory", "Category")
                         .WithMany("Transactions")
-                        .HasForeignKey("TransactionCategoryId")
+                        .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
                         .HasConstraintName("FK_Transaction_TransactionCategory");
 
-                    b.HasOne("SaveMySavings.Models.TransactionType", "TransactionType")
+                    b.HasOne("SaveMySavings.Models.TransactionType", "Type")
                         .WithMany("Transactions")
-                        .HasForeignKey("TransactionTypeId")
+                        .HasForeignKey("TypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
                         .HasConstraintName("FK_Transaction_TransactionType");
 
-                    b.Navigation("TransactionCategory");
+                    b.Navigation("Category");
 
-                    b.Navigation("TransactionType");
+                    b.Navigation("Type");
                 });
 
             modelBuilder.Entity("SaveMySavings.Models.TransactionCategory", b =>

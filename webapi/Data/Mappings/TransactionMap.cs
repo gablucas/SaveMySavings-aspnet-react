@@ -25,26 +25,16 @@ public class TransactionMap : IEntityTypeConfiguration<Transaction>
             .HasColumnName("Amount")
             .HasColumnType("DECIMAL(10, 2)");
 
-        builder.Property(x => x.Installments)
-            .IsRequired()
-            .HasColumnName("Installments")
-            .HasColumnType("INT");
-
         builder.Property(x => x.InitialDate)
             .IsRequired()
-            .HasColumnName("InicialDate")
+            .HasColumnName("InitialDate")
             .HasColumnType("DATETIME");
 
-        builder.Property(x => x.FinalDate)
-            .IsRequired()
-            .HasColumnName("FinalDate")
-            .HasColumnType("DATETIME");
-
-        builder.HasOne(x => x.TransactionType)
+        builder.HasOne(x => x.Type)
             .WithMany(x => x.Transactions)
             .HasConstraintName("FK_Transaction_TransactionType");
 
-        builder.HasOne(x => x.TransactionCategory)
+        builder.HasOne(x => x.Category)
             .WithMany(x => x.Transactions)
             .HasConstraintName("FK_Transaction_TransactionCategory");
     }

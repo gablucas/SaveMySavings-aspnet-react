@@ -10,7 +10,7 @@ namespace SaveMySavings.Controller;
 
 public class TransactionTypeController : ControllerBase
 {
-    [HttpGet("v1/transactions-type")]
+    [HttpGet("v1/types")]
     public async Task<IActionResult> GetAsync([FromServices] SaveMysavingsDataContext context)
     {
             var transactionType = await context.TransactionsType.AsNoTracking().ToListAsync();
