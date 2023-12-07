@@ -1,13 +1,23 @@
 function convertDate(date, type) {
   const normalDate = new Date(date);
 
+  const formatDate = new Intl.DateTimeFormat('en-US', {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+  });
+
+  const dateFormated = formatDate.format(normalDate)
+
+
   if (type === "BR")
   {
-    return `${normalDate.getDate()}/${normalDate.getMonth() + 1}/${normalDate.getFullYear()}`;
+    return dateFormated;
 
   } else if (type === "InputDate")
   {
-    return `${normalDate.getFullYear()}-${normalDate.getMonth() + 1}-${normalDate.getDate()}`;
+    let dateInput = dateFormated.split("/");
+    return `${dateInput[2]}-${dateInput[1]}-${dateInput[0]}`;
   }
 }
 

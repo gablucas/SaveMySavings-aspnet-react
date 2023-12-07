@@ -12,7 +12,7 @@ using SaveMySavings.Data;
 namespace SaveMySavings.Migrations
 {
     [DbContext(typeof(SaveMysavingsDataContext))]
-    [Migration("20231206211857_InitialCreation")]
+    [Migration("20231207000604_InitialCreation")]
     partial class InitialCreation
     {
         /// <inheritdoc />

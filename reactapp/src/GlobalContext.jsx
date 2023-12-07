@@ -8,7 +8,6 @@ export const GlobalProvider = ({ children }) => {
   const [transactions, setTransactions] = React.useState([]);
 
   React.useEffect(() => {
-    console.log("oi")
     getDb(endpoint, setTransactions)
  }, [endpoint])
 

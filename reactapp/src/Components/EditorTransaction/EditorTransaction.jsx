@@ -1,4 +1,5 @@
 import Styles from "./EditorTransaction.module.css";
+import convertDate from "../../Helper/ConvertDate";
 import { useEffect, useState } from "react";
 import { getDb, postDb, putDb } from "../../Helper/Fetch";
 
@@ -6,19 +7,17 @@ const EditorTransaction = ({ editTransaction }) => {
 
     const [title, setTitle] = useState(editTransaction?.title || '');
     const [amount, setAmount] = useState(editTransaction?.amount || 0);
-    const [initialDate, setInitialDate] = useState(editTransaction?.initialDate || '');
-    const [type, setType] = useState(editTransaction?.type || 1);
-    const [category, setCategory] = useState(editTransaction?.category || 1);
+    const [initialDate, setInitialDate] = useState(editTransaction?.initialDate ? convertDate(editTransaction.initialDate, "InputDate") : '');
+    const [type, setType] = useState(editTransaction?.type.id || 1);
+    const [category, setCategory] = useState(editTransaction?.category.id || 1);
 
     const [optionsTypes, setOptionsTypes] = useState();
     const [optionsCategories, setOptionsCategories] = useState();
 
-    useEffect(() => {
+    useEffect(() => { 
       getDb("categories", setOptionsCategories);
       getDb("types", setOptionsTypes);
     }, [])
-
-    console.log(type)
 
     function handleSubmit(e) {
         e.preventDefault();

@@ -21,9 +21,7 @@ const Transactions = () => {
     setToggle(!toggle);
     setEditTransaction(transactions.filter(t => t.id === id)[0]);
   }
-
   
-
     if (transactions.length > 0)
     return (
       <section className={Styles.transactions}>
