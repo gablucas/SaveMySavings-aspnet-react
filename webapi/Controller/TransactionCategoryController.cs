@@ -43,6 +43,7 @@ public class TransactionCategoryController : ControllerBase
         context.TransactionsCategory.Update(transactionCategory);
         await context.SaveChangesAsync();
         return Ok(transactionCategory);
+
     }
 
     [HttpDelete("v1/categories/{id:int}")]
@@ -58,4 +59,5 @@ public class TransactionCategoryController : ControllerBase
         await context.SaveChangesAsync();
         return Ok(transactionCategory);
     }
+       
 }

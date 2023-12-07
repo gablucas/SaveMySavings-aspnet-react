@@ -12,7 +12,25 @@ public class TransactionController : ControllerBase
     [HttpGet("v1/transactions")]
     public async Task<IActionResult> GetAsync([FromServices] SaveMysavingsDataContext context)
     {
-        var categories = await context.Transactions.Include(x => x.Type).Include(x => x.Category).AsNoTracking().ToListAsync();
+        var categories = await context.Transactions
+            .Include(x => x.Type)
+            .Include(x => x.Category)
+            .OrderBy(x => x.InitialDate)
+            .AsNoTracking()
+            .ToListAsync();
+        return Ok(categories);
+    }
+
+    [HttpGet("v1/transactions/type/{id:int}")]
+    public async Task<IActionResult> GetByIdAsync([FromRoute] int id, [FromServices] SaveMysavingsDataContext context)
+    {
+        var categories = await context.Transactions
+            .Include(x => x.Type)
+            .Include(x => x.Category)
+            .OrderBy(x => x.InitialDate)
+            .Where(x => x.Type.Id == id)
+            .AsNoTracking()
+            .ToListAsync();
         return Ok(categories);
     }
 

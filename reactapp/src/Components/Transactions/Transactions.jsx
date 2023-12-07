@@ -1,12 +1,19 @@
 import Styles from "./Transaction.module.css";
 import Modal from "../../Components/Modal/Modal";
+import useToggle from "../../Hooks/useToggle";
 import convertCurrency from "../../Helper/ConvertCurrency";
-import { deleteDb } from '../../Helper/Fetch';
 import convertDate from "../../Helper/ConvertDate";
-import { useState } from "react";
+import { deleteDb } from '../../Helper/Fetch';
+import { useContext, useState } from "react";
+import { GlobalContext } from "../../GlobalContext";
 import EditorTransaction from "../EditorTransaction/EditorTransaction";
+import FilterType from "../Filter/FilterType";
+import FilterIcon from "../../assets/icons/filter.svg";
 
-const Transactions = ({ transactions }) => {
+const Transactions = () => {
+  const { transactions } = useContext(GlobalContext);
+  const filter = useToggle();
+
   const [toggle, setToggle] = useState(false);
   const [editTransaction, setEditTransaction] = useState({});
 
@@ -15,14 +22,14 @@ const Transactions = ({ transactions }) => {
     setEditTransaction(transactions.filter(t => t.id === id)[0]);
   }
 
-
+  
 
     if (transactions.length > 0)
     return (
       <section className={Styles.transactions}>
 
         <ul className={Styles.menu}>
-          <li>Tipo</li>
+          <li>Tipo <img onClick={() => filter.setToggle(true)} src={FilterIcon} alt="" /></li>
           <li>Categoria</li>
           <li>Descrição</li>
           <li>Valor</li>
@@ -44,6 +51,7 @@ const Transactions = ({ transactions }) => {
         ))}
 
       {toggle && <Modal setToggle={setToggle}><EditorTransaction editTransaction={editTransaction} /></Modal>}
+      {filter.toggle && <Modal setToggle={filter.setToggle}><FilterType /></Modal>}
       </section>  
     )
     else

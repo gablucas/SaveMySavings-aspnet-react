@@ -1,11 +1,14 @@
 import Header from "./Components/Header/Header";
+import { GlobalProvider } from "./GlobalContext";
 import Home from "./Pages/Home/Home";
 
 const App = () => {
   return (
     <>
-      <Header />
-      <Home />
+      <GlobalProvider>
+        <Header />
+        <Home />
+      </GlobalProvider>
     </>
   )
 }
