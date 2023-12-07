@@ -9,10 +9,16 @@ import { GlobalContext } from "../../GlobalContext";
 import EditorTransaction from "../EditorTransaction/EditorTransaction";
 import FilterType from "../Filter/FilterType";
 import FilterIcon from "../../assets/icons/filter.svg";
+import FilterCategory from "../Filter/FilterCategory";
+import FilterAmount from "../Filter/FilterAmount";
+import FilterDate from "../Filter/FilterDate";
 
 const Transactions = () => {
   const { transactions } = useContext(GlobalContext);
-  const filter = useToggle();
+  const type = useToggle();
+  const category = useToggle();
+  const amount = useToggle();
+  const date = useToggle();
 
   const [toggle, setToggle] = useState(false);
   const [editTransaction, setEditTransaction] = useState({});
@@ -21,22 +27,21 @@ const Transactions = () => {
     setToggle(!toggle);
     setEditTransaction(transactions.filter(t => t.id === id)[0]);
   }
-  
-    if (transactions.length > 0)
+
     return (
       <section className={Styles.transactions}>
 
         <ul className={Styles.menu}>
-          <li>Tipo <img onClick={() => filter.setToggle(true)} src={FilterIcon} alt="" /></li>
-          <li>Categoria</li>
+          <li>Tipo <img onClick={() => type.setToggle(true)} src={FilterIcon} alt="" /></li>
+          <li>Categoria <img onClick={() => category.setToggle(true)} src={FilterIcon} alt="" /></li>
           <li>Descrição</li>
-          <li>Valor</li>
-          <li>Data</li>
+          <li>Valor <img onClick={() => amount.setToggle(true)} src={FilterIcon} alt="" /></li>
+          <li>Data <img onClick={() => date.setToggle(true)} src={FilterIcon} alt="" /></li>
           <li>Editar item</li>
           <li>Excluir item</li>
         </ul>
 
-        {transactions.map((transaction) => (
+        {transactions?.map((transaction) => (
           <ul key={transaction.id} className={Styles.transaction}>
             <li>{transaction.type.name}</li>
             <li>{transaction.category.name}</li>
@@ -49,11 +54,12 @@ const Transactions = () => {
         ))}
 
       {toggle && <Modal setToggle={setToggle}><EditorTransaction editTransaction={editTransaction} /></Modal>}
-      {filter.toggle && <Modal setToggle={filter.setToggle}><FilterType /></Modal>}
+      {type.toggle && <Modal setToggle={type.setToggle}><FilterType setToggle={type.setToggle}/></Modal>}
+      {category.toggle && <Modal setToggle={category.setToggle}><FilterCategory setToggle={category.setToggle}/></Modal>}
+      {amount.toggle && <Modal setToggle={amount.setToggle}><FilterAmount setToggle={amount.setToggle}/></Modal>}
+      {date.toggle && <Modal setToggle={date.setToggle}><FilterDate setToggle={date.setToggle}/></Modal>}
       </section>  
     )
-    else
-    return(<h1>Sem itens adicionados</h1>)
 }
 
 export default Transactions;

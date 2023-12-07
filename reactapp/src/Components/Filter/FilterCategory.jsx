@@ -4,21 +4,21 @@ import { getDb } from "../../Helper/Fetch";
 import { GlobalContext } from "../../GlobalContext";
 import { addOrUpdateEndpointParameter, removeEndpointParameterValue } from "../../Helper/handleParameters";
 
-const FilterType = ({ setToggle }) => {
+const FilterCategory = ({ setToggle }) => {
   const { endpoint, setEndpoint } = React.useContext(GlobalContext);
   const [types, setTypes] = React.useState();
   const [value, setValue] = React.useState("");
 
   React.useEffect(() => {
-    getDb("types", setTypes)
+    getDb("categories", setTypes)
   }, [])
 
   function handleFilter()
   {
     if (value !== "") {
-      setEndpoint(addOrUpdateEndpointParameter(endpoint, "type", value));
+      setEndpoint(addOrUpdateEndpointParameter(endpoint, "category", value));
     } else {
-      setEndpoint(removeEndpointParameterValue(endpoint, "type"));
+      setEndpoint(removeEndpointParameterValue(endpoint, "category"));
     }
 
     setToggle(false);
@@ -39,4 +39,4 @@ const FilterType = ({ setToggle }) => {
   )
 }
 
-export default FilterType;
+export default FilterCategory;

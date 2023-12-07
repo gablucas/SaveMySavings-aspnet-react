@@ -4,7 +4,7 @@ import { getDb } from "./Helper/Fetch";
 export const GlobalContext = React.createContext();
 
 export const GlobalProvider = ({ children }) => {
-  const [endpoint, setEndpoint] = React.useState("transactions");
+  const [endpoint, setEndpoint] = React.useState("transactions?type=&category=&minAmount=&maxAmount=&minDate=&maxDate=");
   const [transactions, setTransactions] = React.useState([]);
 
   React.useEffect(() => {
@@ -12,7 +12,7 @@ export const GlobalProvider = ({ children }) => {
  }, [endpoint])
 
   return (
-    <GlobalContext.Provider value={{ transactions, setEndpoint }}>
+    <GlobalContext.Provider value={{ transactions, endpoint, setEndpoint }}>
       {children}
     </GlobalContext.Provider>
   )

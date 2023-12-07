@@ -10,27 +10,55 @@ namespace SaveMySavings.Controller;
 public class TransactionController : ControllerBase
 {
     [HttpGet("v1/transactions")]
-    public async Task<IActionResult> GetAsync([FromServices] SaveMysavingsDataContext context)
+    public async Task<IActionResult> GetByIdAsync(
+        [FromQuery] int? type, 
+        [FromQuery] int? category, 
+        [FromQuery] double? minAmount, 
+        [FromQuery] double? maxAmount,
+        [FromQuery] DateTime? minDate,
+        [FromQuery] DateTime? maxDate,
+        [FromServices] SaveMysavingsDataContext context)
     {
-        var categories = await context.Transactions
+        IQueryable<Transaction> categoriesQuery = context.Transactions
             .Include(x => x.Type)
-            .Include(x => x.Category)
-            .OrderBy(x => x.InitialDate)
-            .AsNoTracking()
-            .ToListAsync();
-        return Ok(categories);
-    }
+            .Include(x => x.Category);
 
-    [HttpGet("v1/transactions/type/{id:int}")]
-    public async Task<IActionResult> GetByIdAsync([FromRoute] int id, [FromServices] SaveMysavingsDataContext context)
-    {
-        var categories = await context.Transactions
-            .Include(x => x.Type)
-            .Include(x => x.Category)
+        if (type != null)
+        {
+            categoriesQuery = categoriesQuery.Where(x => x.Type.Id == type);
+        }
+
+        if (category != null)
+        {
+            categoriesQuery = categoriesQuery.Where(x => x.Category.Id == category);
+        }
+
+        if (minAmount != null)
+        {
+            categoriesQuery = categoriesQuery.Where(x => x.Amount >= minAmount);
+        }
+
+        if (maxAmount != null)
+        {
+            categoriesQuery = categoriesQuery.Where(x => x.Amount <= maxAmount);
+        }
+
+        if (minDate != null)
+        {
+            categoriesQuery = categoriesQuery.Where(x => x.InitialDate >= minDate);
+        }
+
+        if (maxDate != null)
+        {
+            categoriesQuery = categoriesQuery.Where(x => x.InitialDate <= maxDate);
+        }
+
+
+        var categories = await categoriesQuery
             .OrderBy(x => x.InitialDate)
-            .Where(x => x.Type.Id == id)
             .AsNoTracking()
             .ToListAsync();
+ 
         return Ok(categories);
     }
 
