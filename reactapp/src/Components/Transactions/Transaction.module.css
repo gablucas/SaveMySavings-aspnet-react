@@ -1,9 +1,18 @@
 
 .transactions ul {
   display: grid;
-  grid-template-columns: repeat(7, 1fr);
+  grid-template-columns: .5fr .5fr 2fr 1fr 1fr .5fr .5fr;
   padding: 10px;
   list-style: none;
+}
+
+.transactions svg {
+  transition:  all .3s;
+}
+
+.transactions svg:hover {
+  fill: #121212;
+  width: 32px;
 }
 
 .menu {
@@ -18,6 +27,11 @@
   align-content: center;
   gap: 10px;
 }
+
+.menu div {
+  display: flex;
+}
+
 
 .transaction:nth-child(odd) {
   background-color: #51AFF7;

@@ -1,3 +1,4 @@
+import CloseIcon from '../Svgs/CloseIcon';
 import Styles from './Modal.module.css';
 
 const Modal = ({ children, setToggle }) => {
@@ -11,7 +12,8 @@ const Modal = ({ children, setToggle }) => {
   return (
     <div onClick={(e) => handleClick(e)} className={Styles.modal_container}>
         <div className={Styles.modal_content}>
-            {children}
+          <span onClick={() => setToggle(false)} className={Styles.modal_close}><CloseIcon /></span>
+          {children}
         </div>
     </div>
   )

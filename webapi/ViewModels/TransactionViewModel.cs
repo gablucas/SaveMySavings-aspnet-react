@@ -14,8 +14,11 @@ public class TransactionViewModel
     [Required(ErrorMessage = "O valor e obrigatorio")]
     public Double Amount { get; set; }
 
-    [Required(ErrorMessage = "Selecione o tipo de transação")]
-    public int Type { get; set; }
+    [Required(ErrorMessage = "O Id de Type é obrigatório")]
+    public int TypeId { get; set; }
+
+    [Required(ErrorMessage = "O Id de Category é obrigatório")]
+    public int CategoryId { get; set; }
 
     [Required(ErrorMessage = "Selecione a categoria da transação")]
     public int Category { get; set; }

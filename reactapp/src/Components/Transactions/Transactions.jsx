@@ -8,13 +8,16 @@ import { useContext, useState } from "react";
 import { GlobalContext } from "../../GlobalContext";
 import EditorTransaction from "../EditorTransaction/EditorTransaction";
 import FilterType from "../Filter/FilterType";
-import FilterIcon from "../../assets/icons/filter.svg";
 import FilterCategory from "../Filter/FilterCategory";
 import FilterAmount from "../Filter/FilterAmount";
 import FilterDate from "../Filter/FilterDate";
+import FilterIcon from "../Svgs/FilterIcon";
+import { getEndpointParameterValue } from "../../Helper/handleParameters";
+import EditIcon from "../Svgs/EditIcon";
+import DeleteIcon from "../Svgs/DeleteIcon";
 
 const Transactions = () => {
-  const { transactions } = useContext(GlobalContext);
+  const { endpoint, transactions } = useContext(GlobalContext);
   const type = useToggle();
   const category = useToggle();
   const amount = useToggle();
@@ -32,13 +35,34 @@ const Transactions = () => {
       <section className={Styles.transactions}>
 
         <ul className={Styles.menu}>
-          <li>Tipo <img onClick={() => type.setToggle(true)} src={FilterIcon} alt="" /></li>
-          <li>Categoria <img onClick={() => category.setToggle(true)} src={FilterIcon} alt="" /></li>
+          <li>Tipo 
+            <div onClick={() => type.setToggle(true)}>
+              <FilterIcon fillColor={getEndpointParameterValue(endpoint, "type") ? "#FFA700" : "#FFFFFF"}/>
+            </div>
+          </li>
+
+          <li>Categoria 
+            <div onClick={() => category.setToggle(true)}>
+              <FilterIcon fillColor={getEndpointParameterValue(endpoint, "category") ? "#FFA700" : "#FFFFFF"}/>
+            </div>
+          </li>
+
           <li>Descrição</li>
-          <li>Valor <img onClick={() => amount.setToggle(true)} src={FilterIcon} alt="" /></li>
-          <li>Data <img onClick={() => date.setToggle(true)} src={FilterIcon} alt="" /></li>
-          <li>Editar item</li>
-          <li>Excluir item</li>
+
+          <li>Valor 
+            <div onClick={() => amount.setToggle(true)} >
+              <FilterIcon fillColor={getEndpointParameterValue(endpoint, "minAmount") ? "#FFA700" : getEndpointParameterValue(endpoint, "maxAmount") ? "#FFA700" : "#FFFFFF" }/>
+            </div>
+          </li>
+
+          <li>Data 
+            <div onClick={() => date.setToggle(true)} >
+              <FilterIcon fillColor={getEndpointParameterValue(endpoint, "minDate") ? "#FFA700" : getEndpointParameterValue(endpoint, "maxDate") ? "#FFA700" : "#FFFFFF"}/>
+            </div>
+          </li>
+
+          <li>Editar</li>
+          <li>Excluir</li>
         </ul>
 
         {transactions?.map((transaction) => (
@@ -48,8 +72,8 @@ const Transactions = () => {
             <li>{transaction.title}</li>
             <li>{convertCurrency(transaction.amount)}</li>
             <li>{convertDate(transaction.initialDate, "BR")}</li>
-            <li className={Styles.action} onClick={() => handleEdit(transaction.id)}>Editar</li>
-            <li className={Styles.action} onClick={() => deleteDb(`transactions/${transaction.id}`)}>Excluir</li>
+            <li className={Styles.action} onClick={() => handleEdit(transaction.id)}><EditIcon /></li>
+            <li className={Styles.action} onClick={() => deleteDb(`transactions/${transaction.id}`)}><DeleteIcon /></li>
           </ul>
         ))}
 

@@ -14,7 +14,7 @@ namespace SaveMySavings.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "TransactionCategory",
+                name: "Type",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -23,20 +23,27 @@ namespace SaveMySavings.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_TransactionCategory", x => x.Id);
+                    table.PrimaryKey("PK_Type", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "TransactionType",
+                name: "Category",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "NVARCHAR(80)", maxLength: 80, nullable: false)
+                    Name = table.Column<string>(type: "NVARCHAR(80)", maxLength: 80, nullable: false),
+                    TypeId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_TransactionType", x => x.Id);
+                    table.PrimaryKey("PK_Category", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Category_Type",
+                        column: x => x.TypeId,
+                        principalTable: "Type",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -55,41 +62,56 @@ namespace SaveMySavings.Migrations
                 {
                     table.PrimaryKey("PK_Transaction", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Transaction_TransactionCategory",
+                        name: "FK_Transaction_Category",
                         column: x => x.CategoryId,
-                        principalTable: "TransactionCategory",
+                        principalTable: "Category",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Transaction_TransactionType",
+                        name: "FK_Transaction_Type",
                         column: x => x.TypeId,
-                        principalTable: "TransactionType",
+                        principalTable: "Type",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.InsertData(
-                table: "TransactionCategory",
-                columns: new[] { "Id", "Name" },
-                values: new object[,]
-                {
-                    { 1, "Lazer" },
-                    { 2, "Casa" },
-                    { 3, "Educação" },
-                    { 4, "Alimentação" },
-                    { 5, "Carro" },
-                    { 6, "Contas" },
-                    { 7, "Outros" }
-                });
-
-            migrationBuilder.InsertData(
-                table: "TransactionType",
+                table: "Type",
                 columns: new[] { "Id", "Name" },
                 values: new object[,]
                 {
                     { 1, "Receita" },
                     { 2, "Despesa" }
                 });
+
+            migrationBuilder.InsertData(
+                table: "Category",
+                columns: new[] { "Id", "Name", "TypeId" },
+                values: new object[,]
+                {
+                    { 1, "Salário", 1 },
+                    { 2, "Investimento", 1 },
+                    { 3, "Prêmio", 1 },
+                    { 4, "Presente", 1 },
+                    { 5, "Outros", 1 },
+                    { 6, "Casa", 2 },
+                    { 7, "Educação", 2 },
+                    { 8, "Eletrônicos", 2 },
+                    { 9, "Lazer", 2 },
+                    { 10, "Restaurante", 2 },
+                    { 11, "Saúde", 2 },
+                    { 12, "Serviços", 2 },
+                    { 13, "Supermercado", 2 },
+                    { 14, "Transporte", 2 },
+                    { 15, "Vestuário", 2 },
+                    { 16, "Viagem", 2 },
+                    { 17, "Outros", 2 }
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Category_TypeId",
+                table: "Category",
+                column: "TypeId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Transaction_CategoryId",
@@ -109,10 +131,10 @@ namespace SaveMySavings.Migrations
                 name: "Transaction");
 
             migrationBuilder.DropTable(
-                name: "TransactionCategory");
+                name: "Category");
 
             migrationBuilder.DropTable(
-                name: "TransactionType");
+                name: "Type");
         }
     }
 }

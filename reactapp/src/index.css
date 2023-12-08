@@ -45,6 +45,7 @@ input,
 select {
   padding: 10px;
   border-radius: 7px;
+  min-width: 200px;
 }
 
 button {

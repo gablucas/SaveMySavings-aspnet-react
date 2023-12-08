@@ -8,39 +8,46 @@ namespace SaveMySavings.Controller;
 
 [ApiController]
 
-public class TransactionCategoryController : ControllerBase
+public class CategoryController : ControllerBase
 {
     [HttpGet("v1/categories")]
     public async Task<IActionResult> GetAsync([FromServices] SaveMysavingsDataContext context)
     {
-        var transactionCategory = await context.TransactionsCategory.AsNoTracking().ToListAsync();
-        return Ok(transactionCategory);
+        var category = await context.Category.AsNoTracking().ToListAsync();
+        return Ok(category);
+    }
+
+    [HttpGet("v1/categories/type/{id:int}")]
+    public async Task<IActionResult> GetAsync([FromRoute] int id ,[FromServices] SaveMysavingsDataContext context)
+    {
+        var category = await context.Category.Where(x => x.TypeId == id).AsNoTracking().ToListAsync();
+        return Ok(category);
     }
 
     [HttpPost("v1/categories")]
-    public async Task<IActionResult> PostAsync([FromBody] TransactionCategoryViewModel model, [FromServices] SaveMysavingsDataContext context)
+    public async Task<IActionResult> PostAsync([FromBody] CategoryViewModel model, [FromServices] SaveMysavingsDataContext context)
     {
-        var transactionCategory = new TransactionCategory
+        var transactionCategory = new Category
         {
             Name = model.Name,
         };
 
-        await context.TransactionsCategory.AddAsync(transactionCategory);
+        await context.Category.AddAsync(transactionCategory);
         await context.SaveChangesAsync();
         return Created($"v1/transactions-category/{transactionCategory}", transactionCategory);
     }
 
     [HttpPut("v1/categories/{id:int}")]
-    public async Task<IActionResult> PutAsync([FromRoute] int id, [FromBody] TransactionCategoryViewModel model, [FromServices] SaveMysavingsDataContext context)
+    public async Task<IActionResult> PutAsync([FromRoute] int id, [FromBody] CategoryViewModel model, [FromServices] SaveMysavingsDataContext context)
     {
-        var transactionCategory = await context.TransactionsCategory.FirstOrDefaultAsync(x => x.Id == id);
+        var transactionCategory = await context.Category.FirstOrDefaultAsync(x => x.Id == id);
         if (transactionCategory == null)
         {
             return NotFound("Categoria não encontrada");
         }
 
         transactionCategory.Name = model.Name;
-        context.TransactionsCategory.Update(transactionCategory);
+        context.Category.Update(transactionCategory);
         await context.SaveChangesAsync();
         return Ok(transactionCategory);
 
@@ -49,13 +56,13 @@ public class TransactionCategoryController : ControllerBase
     [HttpDelete("v1/categories/{id:int}")]
     public async Task<IActionResult> DeleteAsync([FromRoute] int id, [FromServices] SaveMysavingsDataContext context)
     {
-        var transactionCategory = context.TransactionsCategory.FirstOrDefault(x => x.Id == id);
+        var transactionCategory = context.Category.FirstOrDefault(x => x.Id == id);
         if (transactionCategory == null)
         {
             return NotFound("Categoria não encontrada");
         }
 
-        context.TransactionsCategory.Remove(transactionCategory);
+        context.Category.Remove(transactionCategory);
         await context.SaveChangesAsync();
         return Ok(transactionCategory);
     }

@@ -11,16 +11,16 @@ const EditorTransaction = ({ editTransaction }) => {
   const [title, setTitle] = useState(editTransaction?.title || '');
   const [amount, setAmount] = useState(editTransaction?.amount || 0);
   const [initialDate, setInitialDate] = useState(editTransaction?.initialDate ? convertDate(editTransaction.initialDate, "InputDate") : '');
-  const [type, setType] = useState(editTransaction?.type.id || 1);
-  const [category, setCategory] = useState(editTransaction?.category.id || 1);
+  const [typeId, setTypeId] = useState(editTransaction?.type.id || 1);
+  const [categoryId, setCategoryId] = useState(editTransaction?.category.id || 1);
 
   const [optionsTypes, setOptionsTypes] = useState();
   const [optionsCategories, setOptionsCategories] = useState();
 
   useEffect(() => { 
-    getDb("categories", setOptionsCategories);
     getDb("types", setOptionsTypes);
-  }, [])
+    getDb(`categories/type/${typeId}`, setOptionsCategories);
+  }, [typeId])
 
   function handleSubmit(e) {
       e.preventDefault();
@@ -29,8 +29,8 @@ const EditorTransaction = ({ editTransaction }) => {
           title,
           amount,
           initialDate,
-          type,
-          category,
+          typeId,
+          categoryId,
       }
 
       if (!editTransaction) {
@@ -59,7 +59,7 @@ const EditorTransaction = ({ editTransaction }) => {
         </label>
 
         <label htmlFor="">Tipo
-          <select name="" id="" onChange={(e) => setType(e.target.value)}>
+          <select name="" id="" onChange={(e) => setTypeId(e.target.value)}>
             {optionsTypes?.map((ot => (
               <option key={ot.id} value={ot.id}>{ot.name}</option>
             )))}
@@ -68,7 +68,7 @@ const EditorTransaction = ({ editTransaction }) => {
 
 
         <label htmlFor="">Categoria
-          <select name="" id="" onChange={(e) => setCategory(e.target.value)}>
+          <select name="" id="" onChange={(e) => setCategoryId(e.target.value)}>
             {optionsCategories?.map((oc => (
               <option key={oc.id} value={oc.id}>{oc.name}</option>
             )))}

@@ -65,25 +65,14 @@ public class TransactionController : ControllerBase
     [HttpPost("v1/transactions")]
     public async Task<IActionResult> PostAsync([FromBody] TransactionViewModel model, [FromServices] SaveMysavingsDataContext context)
     {
-        var transactionType = await context.TransactionsType.FirstOrDefaultAsync(x => x.Id == model.Type);
-        var transactionCategory = await context.TransactionsCategory.FirstOrDefaultAsync(x => x.Id == model.Category);
 
-        if (transactionType == null)
-        {
-            return NotFound($"Tipo não encontrado {model.Type}");
-        }
-         
-        if (transactionCategory == null)
-        {
-            return NotFound("Categoria não encontrada");
-        }
 
         Transaction transaction = new Transaction
         {
            Title = model.Title,
            Amount = model.Amount,
-           Type = transactionType,
-           Category = transactionCategory,
+           TypeId = model.TypeId,
+           CategoryId = model.CategoryId,
            InitialDate = model.InitialDate,
         };
 
@@ -102,23 +91,10 @@ public class TransactionController : ControllerBase
             return NotFound("Transação não encontrada");
         }
 
-        var transactionType = await context.TransactionsType.FirstOrDefaultAsync(x => x.Id == model.Type);
-        var transactionCategory = await context.TransactionsCategory.FirstOrDefaultAsync(x => x.Id == model.Category);
-
-        if (transactionType == null)
-        {
-            return NotFound("Conteudo nao encontrado");
-        }
-
-        if (transactionCategory == null)
-        {
-            return NotFound("Conteudo nao encontrado");
-        }
-
         transaction.Title = model.Title;
-        transaction.Amount = model.Amount;
-        transaction.Type = transactionType;
-        transaction.Category = transactionCategory;
+        transaction.Amount = model.Amount;  
+        transaction.TypeId = model.TypeId;
+        transaction.CategoryId = model.CategoryId;
         transaction.InitialDate = model.InitialDate;
 
         context.Transactions.Update(transaction);

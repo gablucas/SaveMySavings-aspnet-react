@@ -15,4 +15,13 @@ function removeEndpointParameterValue(url, key) {
 
   return updatedUrl;
 }
-export { addOrUpdateEndpointParameter, removeEndpointParameterValue}
+
+function getEndpointParameterValue(url, key) {
+  // Use uma expressão regular para encontrar o valor do parâmetro
+  var match = url.match(new RegExp('[?&]' + key + '=([^&]*)'));
+  
+  // Se o parâmetro for encontrado, retorne o valor, caso contrário, retorne null
+  return match ? decodeURIComponent(match[1]) : null;
+}
+
+export { addOrUpdateEndpointParameter, removeEndpointParameterValue, getEndpointParameterValue}

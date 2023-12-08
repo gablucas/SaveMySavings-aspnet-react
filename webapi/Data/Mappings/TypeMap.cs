@@ -1,14 +1,13 @@
-using SaveMySavings.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace SaveMySavings.Data.Mappings;
 
-public class TransactionTypeMap : IEntityTypeConfiguration<TransactionType>
+public class TypeMap : IEntityTypeConfiguration<Models.Type>
 {
-    public void Configure(EntityTypeBuilder<TransactionType> builder)
+    public void Configure(EntityTypeBuilder<Models.Type> builder)
     {
-        builder.ToTable("TransactionType");
+        builder.ToTable("Type");
 
         builder.HasKey(x => x.Id);
         builder.Property(x => x.Id)
@@ -22,8 +21,8 @@ public class TransactionTypeMap : IEntityTypeConfiguration<TransactionType>
             .HasMaxLength(80);
 
         builder.HasData(
-            new TransactionType { Id = 1, Name = "Receita" },
-            new TransactionType { Id = 2, Name = "Despesa" }
+            new Models.Type { Id = 1, Name = "Receita" },
+            new Models.Type { Id = 2, Name = "Despesa" }
         );
     }
 }

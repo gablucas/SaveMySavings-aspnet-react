@@ -2,9 +2,7 @@ import MyFetch from "../axios/config";
 
 const getDb = async (endpoint, setState) => {
   const response = await MyFetch(endpoint);
-
   const data = response.data;
-  console.log(data);
   setState(data)
 }
 

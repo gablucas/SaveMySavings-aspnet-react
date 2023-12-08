@@ -7,8 +7,8 @@ namespace SaveMySavings.Data;
 public class SaveMysavingsDataContext : DbContext
 {
     public DbSet<Transaction> Transactions { get; set; }
-    public DbSet<TransactionType> TransactionsType { get; set; }
-    public DbSet<TransactionCategory> TransactionsCategory { get; set; }
+    public DbSet<Models.Type> Type { get; set; }
+    public DbSet<Category> Category { get; set; }
 
     public SaveMysavingsDataContext(DbContextOptions<SaveMysavingsDataContext> options) : base(options)
     {
@@ -18,7 +18,7 @@ public class SaveMysavingsDataContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfiguration(new TransactionMap());
-        modelBuilder.ApplyConfiguration(new TransactionTypeMap());
-        modelBuilder.ApplyConfiguration(new TransactionCategoryMap());
+        modelBuilder.ApplyConfiguration(new TypeMap());
+        modelBuilder.ApplyConfiguration(new CategoryMap());
     }
 }

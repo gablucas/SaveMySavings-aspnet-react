@@ -32,11 +32,15 @@ public class TransactionMap : IEntityTypeConfiguration<Transaction>
 
         builder.HasOne(x => x.Type)
             .WithMany(x => x.Transactions)
-            .HasConstraintName("FK_Transaction_TransactionType");
+            .HasForeignKey(x => x.TypeId)
+            .HasConstraintName("FK_Transaction_Type")
+            .OnDelete(DeleteBehavior.Restrict);
 
         builder.HasOne(x => x.Category)
             .WithMany(x => x.Transactions)
-            .HasConstraintName("FK_Transaction_TransactionCategory");
+            .HasForeignKey(x => x.CategoryId)
+            .HasConstraintName("FK_Transaction_Category")
+            .OnDelete(DeleteBehavior.Restrict);
     }
 }
 

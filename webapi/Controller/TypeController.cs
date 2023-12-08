@@ -8,12 +8,12 @@ namespace SaveMySavings.Controller;
 
 [ApiController]
 
-public class TransactionTypeController : ControllerBase
+public class TypeController : ControllerBase
 {
     [HttpGet("v1/types")]
     public async Task<IActionResult> GetAsync([FromServices] SaveMysavingsDataContext context)
     {
-            var transactionType = await context.TransactionsType.AsNoTracking().ToListAsync();
+            var transactionType = await context.Type.AsNoTracking().ToListAsync();
             return Ok(transactionType);
     }
 }

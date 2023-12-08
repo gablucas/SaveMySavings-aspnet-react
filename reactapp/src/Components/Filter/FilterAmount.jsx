@@ -1,12 +1,12 @@
 import React from "react";
 import Styles from "./Filter.module.css";
 import { GlobalContext } from "../../GlobalContext";
-import { addOrUpdateEndpointParameter, removeEndpointParameterValue } from "../../Helper/handleParameters";
+import { addOrUpdateEndpointParameter, getEndpointParameterValue, removeEndpointParameterValue } from "../../Helper/handleParameters";
 
 const FilterAmount = ({ setToggle }) => {
   const { endpoint, setEndpoint } = React.useContext(GlobalContext);
-  const [minAmount, setMinAmount] = React.useState("");
-  const [maxAmount, setMaxAmount] = React.useState("");
+  const [minAmount, setMinAmount] = React.useState(getEndpointParameterValue(endpoint, "minAmount") || "");
+  const [maxAmount, setMaxAmount] = React.useState(getEndpointParameterValue(endpoint, "maxAmount") || "");
 
   function handleFilter()
   {
@@ -37,6 +37,14 @@ const FilterAmount = ({ setToggle }) => {
     setToggle(false);
   }
 
+  function handleCleanFilter() {
+    setMinAmount("");
+    setMaxAmount("");
+    let newEndpoint = removeEndpointParameterValue(endpoint, "minAmount");
+      newEndpoint = removeEndpointParameterValue(newEndpoint, "maxAmount");
+      setEndpoint(newEndpoint);
+  }
+
   return (
     <div className={Styles.filter}>
       <label htmlFor="">Valor mínimo
@@ -46,6 +54,8 @@ const FilterAmount = ({ setToggle }) => {
       <label htmlFor="">Valor Máximo
         <input type="number" value={maxAmount} onChange={(e) => setMaxAmount(e.target.value)} />
       </label>
+
+      {(minAmount !== "" || maxAmount !== "") && <button onClick={handleCleanFilter}>Limpar Filtro</button>}
       <button onClick={handleFilter}>Filtrar</button>
     </div>
   )
