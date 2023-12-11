@@ -23,11 +23,9 @@ O projeto possui duas pastas principais (webapi para o backend) e (reactapp para
   - npm run dev 
 
 ## Planejamento
-  - Criação de categorias customizadas e separadas para cada tipo de transação
+  - Visualização das transações por mês
   - Opção para despesas parceladas
   - Opção para receitas ou despesas fixas
-  - Visualização das transações por mês
-  - Filtragem de transações
   - Sistema de login e cadastro de usuário utilizando autenticação JWT
     
 ## Tecnologias utilizadas
