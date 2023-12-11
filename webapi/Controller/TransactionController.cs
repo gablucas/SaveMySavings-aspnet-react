@@ -19,101 +19,134 @@ public class TransactionController : ControllerBase
         [FromQuery] DateTime? maxDate,
         [FromServices] SaveMysavingsDataContext context)
     {
-        IQueryable<Transaction> categoriesQuery = context.Transactions
-            .Include(x => x.Type)
-            .Include(x => x.Category);
 
-        if (type != null)
+        try
         {
-            categoriesQuery = categoriesQuery.Where(x => x.Type.Id == type);
-        }
+            IQueryable<Transaction> categoriesQuery = context.Transactions
+                .Include(x => x.Type)
+                .Include(x => x.Category);
 
-        if (category != null)
+            if (type != null)
+            {
+                categoriesQuery = categoriesQuery.Where(x => x.Type.Id == type);
+            }
+
+            if (category != null)
+            {
+                categoriesQuery = categoriesQuery.Where(x => x.Category.Id == category);
+            }
+
+            if (minAmount != null)
+            {
+                categoriesQuery = categoriesQuery.Where(x => x.Amount >= minAmount);
+            }
+
+            if (maxAmount != null)
+            {
+                categoriesQuery = categoriesQuery.Where(x => x.Amount <= maxAmount);
+            }
+
+            if (minDate != null)
+            {
+                categoriesQuery = categoriesQuery.Where(x => x.InitialDate >= minDate);
+            }
+
+            if (maxDate != null)
+            {
+                categoriesQuery = categoriesQuery.Where(x => x.InitialDate <= maxDate);
+            }
+
+
+            var categories = await categoriesQuery
+                .OrderBy(x => x.InitialDate)
+                .AsNoTracking()
+                .ToListAsync();
+
+            return Ok(categories);
+
+        } catch
         {
-            categoriesQuery = categoriesQuery.Where(x => x.Category.Id == category);
+            return StatusCode(500, "Falha interna no servidor");
         }
-
-        if (minAmount != null)
-        {
-            categoriesQuery = categoriesQuery.Where(x => x.Amount >= minAmount);
-        }
-
-        if (maxAmount != null)
-        {
-            categoriesQuery = categoriesQuery.Where(x => x.Amount <= maxAmount);
-        }
-
-        if (minDate != null)
-        {
-            categoriesQuery = categoriesQuery.Where(x => x.InitialDate >= minDate);
-        }
-
-        if (maxDate != null)
-        {
-            categoriesQuery = categoriesQuery.Where(x => x.InitialDate <= maxDate);
-        }
-
-
-        var categories = await categoriesQuery
-            .OrderBy(x => x.InitialDate)
-            .AsNoTracking()
-            .ToListAsync();
- 
-        return Ok(categories);
     }
 
     [HttpPost("v1/transactions")]
     public async Task<IActionResult> PostAsync([FromBody] TransactionViewModel model, [FromServices] SaveMysavingsDataContext context)
     {
 
-
-        Transaction transaction = new Transaction
+        try
         {
-           Title = model.Title,
-           Amount = model.Amount,
-           TypeId = model.TypeId,
-           CategoryId = model.CategoryId,
-           InitialDate = model.InitialDate,
-        };
+            Transaction transaction = new Transaction
+            {
+                Title = model.Title,
+                Amount = model.Amount,
+                TypeId = model.TypeId,
+                CategoryId = model.CategoryId,
+                InitialDate = model.InitialDate,
+            };
 
-        await context.Transactions.AddAsync(transaction);
-        await context.SaveChangesAsync();
+            await context.Transactions.AddAsync(transaction);
+            await context.SaveChangesAsync();
 
-        return Created($"v1/transactions/{transaction.Id}", transaction);
+            return Created($"v1/transactions/{transaction.Id}", transaction);
+
+        } catch
+        {
+            return StatusCode(500, "Falha interna no servidor");
+        }
+
+
     }
 
     [HttpPut("v1/transactions/{id:int}")]
     public async Task<IActionResult> PutAsync([FromRoute] int id, [FromBody] TransactionViewModel model, [FromServices] SaveMysavingsDataContext context)
     {
-        var transaction = await context.Transactions.FirstOrDefaultAsync(x => x.Id == id);
-        if (transaction == null)
+
+        try
         {
-            return NotFound("Transação não encontrada");
+            var transaction = await context.Transactions.FirstOrDefaultAsync(x => x.Id == id);
+            if (transaction == null)
+            {
+                return NotFound("Transação não encontrada");
+            }
+
+            transaction.Title = model.Title;
+            transaction.Amount = model.Amount;
+            transaction.TypeId = model.TypeId;
+            transaction.CategoryId = model.CategoryId;
+            transaction.InitialDate = model.InitialDate;
+
+            context.Transactions.Update(transaction);
+            await context.SaveChangesAsync();
+
+            return Ok(transaction);
+
+        } catch
+        {
+            return StatusCode(500, "Falha interna no servidor");
         }
 
-        transaction.Title = model.Title;
-        transaction.Amount = model.Amount;  
-        transaction.TypeId = model.TypeId;
-        transaction.CategoryId = model.CategoryId;
-        transaction.InitialDate = model.InitialDate;
-
-        context.Transactions.Update(transaction);
-        await context.SaveChangesAsync();
-
-        return Ok(transaction);
     }
 
     [HttpDelete("v1/transactions/{id:int}")]
     public async Task<IActionResult> DeleteAsync([FromRoute] int id, [FromServices] SaveMysavingsDataContext context)
     {
-        var transaction = await context.Transactions.FirstOrDefaultAsync(x => x.Id == id);
-        if (transaction == null)
+        try
         {
-            return NotFound("Transação não encontrada");
+            var transaction = await context.Transactions.FirstOrDefaultAsync(x => x.Id == id);
+            if (transaction == null)
+            {
+                return NotFound("Transação não encontrada");
+            }
+
+            context.Transactions.Remove(transaction);
+            await context.SaveChangesAsync();
+            return Ok(transaction);
+
+        } catch
+        {
+            return StatusCode(500, "Falha interna no servidor");
         }
 
-        context.Transactions.Remove(transaction);
-        await context.SaveChangesAsync();
-        return Ok(transaction);
     }
 }

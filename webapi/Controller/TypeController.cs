@@ -13,7 +13,15 @@ public class TypeController : ControllerBase
     [HttpGet("v1/types")]
     public async Task<IActionResult> GetAsync([FromServices] SaveMysavingsDataContext context)
     {
+        try 
+        {
             var transactionType = await context.Type.AsNoTracking().ToListAsync();
             return Ok(transactionType);
+
+        } catch
+        {
+            return StatusCode(500, "Falha interna no servidor");
+        }
+            
     }
 }
