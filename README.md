@@ -1,4 +1,4 @@
-# SaveMySavings (Em desenvolvimento - Versão beta)
+# SaveMySavings (Em desenvolvimento)
 A versão atual não corresponde ao produto final, atualmente é possível criar, atualizar, conferir e deletar transações.
 
 ## Sobre
